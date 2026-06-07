@@ -1,0 +1,17 @@
+name: Notify goku-site on docs push
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger goku-site sync
+        run: |
+          curl -s -X POST \
+            -H "Authorization: token ${{ secrets.GOKU_SYNC_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/chenbinsg/goku-site/dispatches \
+            -d '{"event_type":"goku-docs-updated"}'
