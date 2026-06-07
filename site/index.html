@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Goku Platform — Developer Docs</title>
+  <meta name="description" content="Official developer documentation for the Goku AI Agent Platform — Core, Studio, Router, SDK, and Helm.">
+  <style>
+    :root {
+      --brand: #0f766e;
+      --brand-strong: #115e59;
+      --accent: #c2410c;
+      --text: #111827;
+      --muted: #5b6472;
+      --surface: rgba(255,255,255,0.84);
+      --max: 1100px;
+      --topbar-height: 72px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      padding-top: var(--topbar-height);
+      font-family: "SF Pro Display", "Segoe UI", "PingFang SC", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(194,65,12,0.08), transparent 26%),
+        radial-gradient(circle at top right, rgba(15,118,110,0.13), transparent 28%),
+        linear-gradient(180deg, #fbfaf7 0%, #f5efe6 100%);
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* Topbar */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 30;
+      backdrop-filter: blur(18px);
+      background: rgba(251,250,247,0.88);
+      border-bottom: 1px solid rgba(15,23,42,0.06);
+      box-shadow: 0 4px 18px rgba(15,23,42,0.04);
+    }
+    .topbar-inner {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+      min-height: var(--topbar-height);
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-mark {
+      width: 38px; height: 38px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--brand), var(--accent));
+      color: #fff; display: grid; place-items: center;
+      font-weight: 900; font-size: 18px;
+    }
+    .brand-copy strong { display: block; font-size: 15px; letter-spacing: -0.02em; }
+    .brand-copy span { display: block; font-size: 12px; color: var(--muted); margin-top: 1px; }
+    .nav { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .nav a {
+      padding: 8px 13px; border-radius: 999px; font-size: 13px; color: var(--muted);
+      border: 1px solid transparent; transition: .16s ease;
+    }
+    .nav a:hover { color: var(--text); border-color: rgba(15,23,42,0.10); background: rgba(255,255,255,0.6); }
+    .btn-site {
+      padding: 9px 16px; border-radius: 12px; font-size: 13px; font-weight: 700;
+      background: linear-gradient(135deg, var(--brand), var(--brand-strong));
+      color: #fff; box-shadow: 0 6px 18px rgba(15,118,110,0.22);
+      transition: transform .16s ease;
+    }
+    .btn-site:hover { transform: translateY(-1px); }
+
+    /* Shell */
+    .shell { width: min(calc(100% - 32px), var(--max)); margin: 0 auto; padding: 48px 0 72px; }
+
+    /* Hero */
+    .hero { margin-bottom: 48px; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 13px; border-radius: 999px;
+      border: 1px solid rgba(15,118,110,0.18);
+      background: rgba(15,118,110,0.08);
+      color: var(--brand-strong); font-size: 12px; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 18px;
+    }
+    h1 {
+      margin: 0 0 14px; font-size: clamp(32px, 5vw, 52px);
+      letter-spacing: -0.045em; line-height: 1.06;
+    }
+    .lede { margin: 0; font-size: 18px; color: var(--muted); line-height: 1.7; max-width: 640px; }
+
+    /* Repo grid */
+    .repo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+    .repo-card {
+      background: var(--surface); border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.55);
+      box-shadow: 0 14px 40px rgba(15,23,42,0.08);
+      backdrop-filter: blur(10px);
+      padding: 24px; display: flex; flex-direction: column; gap: 10px;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .repo-card:hover { transform: translateY(-2px); box-shadow: 0 20px 48px rgba(15,23,42,0.12); }
+    .repo-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 11px; border-radius: 999px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+      width: fit-content;
+    }
+    .repo-card h3 { margin: 0; font-size: 20px; letter-spacing: -0.03em; }
+    .repo-card p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.65; flex: 1; }
+    .repo-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip {
+      padding: 4px 10px; border-radius: 999px;
+      border: 1px solid rgba(15,23,42,0.10);
+      font-size: 12px; color: var(--muted);
+      background: rgba(255,255,255,0.7);
+    }
+    .repo-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 4px; font-size: 13px; font-weight: 600; color: var(--brand-strong);
+    }
+    .repo-link:hover { text-decoration: underline; }
+
+    /* Color variants */
+    .badge-core    { background: rgba(217,119,6,0.10);  color: #b45309; border: 1px solid rgba(217,119,6,0.20); }
+    .badge-studio  { background: rgba(22,163,74,0.10);  color: #15803d; border: 1px solid rgba(22,163,74,0.20); }
+    .badge-router  { background: rgba(147,51,234,0.10); color: #7e22ce; border: 1px solid rgba(147,51,234,0.20); }
+    .badge-sdk     { background: rgba(59,130,246,0.10); color: #1d4ed8; border: 1px solid rgba(59,130,246,0.20); }
+    .badge-docs    { background: rgba(15,118,110,0.10); color: #0f766e; border: 1px solid rgba(15,118,110,0.20); }
+
+    /* Quick install */
+    .install-section { margin-bottom: 48px; }
+    .section-label {
+      display: block; margin-bottom: 10px;
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--brand-strong);
+    }
+    h2 { margin: 0 0 18px; font-size: clamp(24px, 3.5vw, 36px); letter-spacing: -0.04em; }
+    .install-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .install-card {
+      background: var(--surface); border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.55);
+      box-shadow: 0 14px 40px rgba(15,23,42,0.08);
+      backdrop-filter: blur(10px);
+      padding: 22px; display: flex; flex-direction: column; gap: 12px;
+    }
+    .install-card h3 { margin: 0; font-size: 18px; letter-spacing: -0.02em; }
+    .install-card p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.6; }
+    .code-shell {
+      border-radius: 16px; overflow: hidden; background: #0f172a;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+    }
+    .code-toolbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 14px 0; color: #94a3b8;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .code-toolbar button {
+      border: 1px solid rgba(148,163,184,0.20); background: transparent;
+      color: #e2e8f0; border-radius: 999px; padding: 5px 10px;
+      font-size: 11px; font-weight: 700; cursor: pointer;
+    }
+    pre {
+      margin: 0; padding: 14px 16px; color: #d1fae5;
+      font-size: 12.5px; line-height: 1.65;
+      font-family: "SFMono-Regular", "Menlo", "Consolas", monospace;
+      white-space: pre-wrap; word-break: break-word;
+    }
+
+    /* Execution flow */
+    .flow-section {
+      background: var(--surface); border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.55);
+      box-shadow: 0 14px 40px rgba(15,23,42,0.08);
+      backdrop-filter: blur(10px);
+      padding: 28px; margin-bottom: 48px;
+    }
+    .flow-section h2 { margin: 0 0 6px; }
+    .flow-section p { margin: 0 0 20px; color: var(--muted); font-size: 15px; }
+    .flow-steps {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+    }
+    .flow-step {
+      padding: 8px 14px; border-radius: 12px;
+      font-size: 13px; font-weight: 600;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(15,23,42,0.10);
+    }
+    .flow-arrow { font-size: 18px; color: var(--muted); }
+
+    /* Footer */
+    footer { padding: 0 0 48px; }
+    .footer-card {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 16px;
+      padding: 18px 24px; border-radius: 18px;
+      background: rgba(255,255,255,0.68);
+      border: 1px solid rgba(15,23,42,0.08);
+    }
+    .footer-card p { margin: 4px 0 0; font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .footer-links { display: flex; gap: 8px; flex-wrap: wrap; }
+    .footer-links a {
+      padding: 8px 12px; border-radius: 999px;
+      background: rgba(255,255,255,0.8); border: 1px solid rgba(15,23,42,0.08);
+      color: var(--muted); font-size: 12px; font-weight: 600;
+    }
+    .footer-links a:hover { color: var(--text); border-color: rgba(15,23,42,0.16); }
+
+    @media (max-width: 760px) {
+      :root { --topbar-height: 126px; }
+      .topbar-inner { flex-direction: column; align-items: flex-start; padding: 12px 0; }
+      .nav { width: 100%; }
+      .install-grid { grid-template-columns: 1fr; }
+      .flow-steps { gap: 6px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="./">
+        <div class="brand-mark">G</div>
+        <div class="brand-copy">
+          <strong>Goku Platform</strong>
+          <span>Developer Documentation</span>
+        </div>
+      </a>
+      <nav class="nav">
+        <a href="#repos">Repos</a>
+        <a href="#install">Install</a>
+        <a href="https://github.com/chenbinsg/goku-docs" target="_blank">GitHub</a>
+        <a class="btn-site" href="https://aipass.keime.ai" target="_blank">Product Site ↗</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <div class="hero">
+      <div class="eyebrow">Developer Documentation</div>
+      <h1>Goku Platform</h1>
+      <p class="lede">Enterprise AI Agent Platform — open source, self-hosted, built for real business workflows. Five focused repositories, one coherent platform.</p>
+    </div>
+
+    <!-- Repos -->
+    <span class="section-label" id="repos">Platform Repositories</span>
+    <div class="repo-grid">
+
+      <a class="repo-card" href="https://github.com/chenbinsg/goku-core" target="_blank">
+        <span class="repo-badge badge-core">AIOS Core</span>
+        <h3>goku-core</h3>
+        <p>Business-neutral runtime engine — task state, approval chains, RBAC, audit logs, scheduler, retry &amp; recovery, and multi-tenant isolation.</p>
+        <div class="repo-chips">
+          <span class="chip">Task State</span>
+          <span class="chip">Timeline</span>
+          <span class="chip">Policy / RBAC</span>
+          <span class="chip">Approval</span>
+          <span class="chip">Audit</span>
+          <span class="chip">Scheduler</span>
+          <span class="chip">Retry / Recovery</span>
+        </div>
+        <span class="repo-link">View on GitHub →</span>
+      </a>
+
+      <a class="repo-card" href="https://github.com/chenbinsg/goku-studio" target="_blank">
+        <span class="repo-badge badge-studio">Studio</span>
+        <h3>goku-studio</h3>
+        <p>Application construction layer — build, manage, and publish AI agents, workflows, tools, MCP integrations, knowledge bases, memory, and skills.</p>
+        <div class="repo-chips">
+          <span class="chip">Agents</span>
+          <span class="chip">Workflows</span>
+          <span class="chip">Tools</span>
+          <span class="chip">MCP</span>
+          <span class="chip">Knowledge</span>
+          <span class="chip">Memory</span>
+          <span class="chip">Skills</span>
+        </div>
+        <span class="repo-link">View on GitHub →</span>
+      </a>
+
+      <a class="repo-card" href="https://github.com/chenbinsg/goku-router" target="_blank">
+        <span class="repo-badge badge-router">Router</span>
+        <h3>goku-router</h3>
+        <p>Model-neutral LLM gateway — intelligent routing across providers with cost control, latency SLAs, quota enforcement, and automatic fallback.</p>
+        <div class="repo-chips">
+          <span class="chip">Provider Adapter</span>
+          <span class="chip">Routing Rules</span>
+          <span class="chip">Cost / Token</span>
+          <span class="chip">Latency / SLA</span>
+          <span class="chip">Fallback</span>
+          <span class="chip">Quota</span>
+        </div>
+        <span class="repo-link">View on GitHub →</span>
+      </a>
+
+      <a class="repo-card" href="https://github.com/chenbinsg/goku-sdk" target="_blank">
+        <span class="repo-badge badge-sdk">SDK</span>
+        <h3>goku-sdk</h3>
+        <p>Official Python and TypeScript SDKs for the Goku External API — install, quick-start guides, and full API reference.</p>
+        <div class="repo-chips">
+          <span class="chip">Python SDK</span>
+          <span class="chip">TypeScript SDK</span>
+          <span class="chip">API Reference</span>
+        </div>
+        <span class="repo-link">View on GitHub →</span>
+      </a>
+
+      <a class="repo-card" href="https://github.com/chenbinsg/goku-docs" target="_blank">
+        <span class="repo-badge badge-docs">Docs</span>
+        <h3>goku-docs</h3>
+        <p>Cross-repo documentation — architecture guides, deployment runbooks, SDK guidelines, roadmaps, security, and operations references.</p>
+        <div class="repo-chips">
+          <span class="chip">Architecture</span>
+          <span class="chip">Deployment</span>
+          <span class="chip">Security</span>
+          <span class="chip">Roadmaps</span>
+          <span class="chip">Operations</span>
+        </div>
+        <span class="repo-link">View on GitHub →</span>
+      </a>
+
+    </div>
+
+    <!-- Execution flow -->
+    <div class="flow-section">
+      <span class="section-label">Execution Flow</span>
+      <h2>How a request flows through the platform</h2>
+      <p>Every user request passes through all four layers in sequence — Console handles entry, Core manages state and policy, Studio loads agent definitions, Router selects the right model.</p>
+      <div class="flow-steps">
+        <span class="flow-step" style="border-color:rgba(59,130,246,0.3);background:rgba(59,130,246,0.06);color:#1d4ed8;">User Request</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step" style="border-color:rgba(59,130,246,0.3);background:rgba(59,130,246,0.06);color:#1d4ed8;">Console</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step" style="border-color:rgba(217,119,6,0.3);background:rgba(217,119,6,0.06);color:#b45309;">Core creates task</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step" style="border-color:rgba(22,163,74,0.3);background:rgba(22,163,74,0.06);color:#15803d;">Studio loads definitions</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step" style="border-color:rgba(217,119,6,0.3);background:rgba(217,119,6,0.06);color:#b45309;">Policy check</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step" style="border-color:rgba(147,51,234,0.3);background:rgba(147,51,234,0.06);color:#7e22ce;">Router selects LLM</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step" style="border-color:rgba(22,163,74,0.3);background:rgba(22,163,74,0.06);color:#15803d;">Tool / MCP action</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step" style="border-color:rgba(217,119,6,0.3);background:rgba(217,119,6,0.06);color:#b45309;">Timeline / Audit</span>
+      </div>
+    </div>
+
+    <!-- Install -->
+    <span class="section-label" id="install">Quick Install</span>
+    <h2>Get started in minutes</h2>
+    <div class="install-grid">
+      <div class="install-card">
+        <span style="display:inline-flex;padding:5px 11px;border-radius:999px;background:rgba(15,118,110,0.08);color:var(--brand-strong);font-size:11px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;width:fit-content;">Docker Compose</span>
+        <h3>Quickest start</h3>
+        <p>For evaluation, internal pilots, and small team deployments.</p>
+        <div class="code-shell">
+          <div class="code-toolbar">
+            <span>Shell</span>
+            <button onclick="copyCode('cmd-docker', this)">Copy</button>
+          </div>
+          <pre id="cmd-docker">curl -fsSL https://raw.githubusercontent.com/chenbinsg/goku-core/main/install.sh | bash</pre>
+        </div>
+      </div>
+      <div class="install-card">
+        <span style="display:inline-flex;padding:5px 11px;border-radius:999px;background:rgba(194,65,12,0.10);color:#9a3412;font-size:11px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;width:fit-content;">Helm + Kubernetes</span>
+        <h3>Production scale</h3>
+        <p>Full Kubernetes deployment with Helm for production environments.</p>
+        <div class="code-shell">
+          <div class="code-toolbar">
+            <span>Shell</span>
+            <button onclick="copyCode('cmd-helm', this)">Copy</button>
+          </div>
+          <pre id="cmd-helm">helm repo add goku https://chenbinsg.github.io/goku-core/helm
+helm install goku goku/goku</pre>
+        </div>
+      </div>
+      <div class="install-card">
+        <span style="display:inline-flex;padding:5px 11px;border-radius:999px;background:rgba(59,130,246,0.10);color:#1d4ed8;font-size:11px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;width:fit-content;">Python SDK</span>
+        <h3>Developer integration</h3>
+        <p>Install the Python SDK to integrate Goku into your own applications.</p>
+        <div class="code-shell">
+          <div class="code-toolbar">
+            <span>Shell</span>
+            <button onclick="copyCode('cmd-sdk', this)">Copy</button>
+          </div>
+          <pre id="cmd-sdk">pip install goku-sdk
+
+# TypeScript
+npm install @goku/sdk</pre>
+        </div>
+      </div>
+      <div class="install-card">
+        <span style="display:inline-flex;padding:5px 11px;border-radius:999px;background:rgba(22,163,74,0.10);color:#15803d;font-size:11px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;width:fit-content;">Studio API</span>
+        <h3>Build agents via API</h3>
+        <p>Use the Studio API to create and manage agents, workflows, and tools programmatically.</p>
+        <div class="code-shell">
+          <div class="code-toolbar">
+            <span>Shell</span>
+            <button onclick="copyCode('cmd-studio', this)">Copy</button>
+          </div>
+          <pre id="cmd-studio">git clone https://github.com/chenbinsg/goku-studio
+cd goku-studio && docker compose up -d</pre>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-card">
+        <div>
+          <strong>Goku Platform Docs</strong>
+          <p>goku-core · goku-studio · goku-router · goku-sdk · goku-docs</p>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/chenbinsg/goku-core" target="_blank">Core</a>
+          <a href="https://github.com/chenbinsg/goku-studio" target="_blank">Studio</a>
+          <a href="https://github.com/chenbinsg/goku-router" target="_blank">Router</a>
+          <a href="https://github.com/chenbinsg/goku-sdk" target="_blank">SDK</a>
+          <a href="https://aipass.keime.ai" target="_blank">Product Site</a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    function copyCode(id, btn) {
+      navigator.clipboard.writeText(document.getElementById(id).innerText.trim());
+      const orig = btn.innerHTML;
+      btn.textContent = 'Copied';
+      setTimeout(() => { btn.innerHTML = orig; }, 1400);
+    }
+  </script>
+</body>
+</html>
