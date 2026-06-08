@@ -197,7 +197,7 @@ UNIQUE(tenant_id, user_id, channel, external_user_id)
 {
   "channel": "line",
   "external_user_id": "Uxxxxxxxx",
-  "tenant_hint": "netstars",
+  "tenant_hint": "your-tenant",
   "type": "text",
   "text": "帮我看一下今天的审批",
   "attachments": [],

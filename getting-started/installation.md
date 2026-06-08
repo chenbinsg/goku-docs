@@ -88,8 +88,8 @@ OUTLOOK_TENANT_ID=Azure Tenant ID
 OUTLOOK_MAILBOX=日历/邮箱所有者邮箱
 OUTLOOK_CALENDAR_MAILBOX=日历所有者邮箱
 OUTLOOK_CALENDAR_TIMEZONE=Tokyo Standard Time
-# AIOS 内置 Netstars 内部会议室映射，可不填；如资源邮箱变更，可用此项覆盖：
-# OUTLOOK_ROOM_MAP_JSON={"Japan":"JPY@netstars.co.jp","China":"China@netstars.co.jp","Singapore":"Singapore@netstars.co.jp","USA":"USA@netstars.co.jp","Python":"Python@netstars.co.jp"}
+# Optional: override default meeting room resource mailboxes
+# OUTLOOK_ROOM_MAP_JSON={"Tokyo":"meeting-room-a@your-domain.com","Beijing":"meeting-room-b@your-domain.com","Singapore":"meeting-room-c@your-domain.com"}
 ```
 
 Microsoft Entra ID 中建议授予并管理员同意以下 Microsoft Graph Application 权限：
