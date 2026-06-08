@@ -1,12 +1,7 @@
 name: Deploy Docs to GitHub Pages
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'site/**'
-      - '.github/workflows/pages.yml'
-  workflow_dispatch:
+  workflow_dispatch:  # manual only — docs are read directly on GitHub as markdown
 
 permissions:
   contents: read
@@ -26,7 +21,8 @@ jobs:
       - name: Build site
         run: |
           mkdir -p _site
-          cp -r site/* _site/
+          find . -name "*.md" -not -path "./.git/*" -not -path "./_site/*" | while read f; do
+            dir="_site/$(dirname "$f")"; mkdir -p "$dir"; cp "$f" "$dir/"; done
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
