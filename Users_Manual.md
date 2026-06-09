@@ -2016,7 +2016,7 @@ aios-cli dashboard
 ### 20.1 目录结构
 
 ```
-$AGENT_WORKSPACE/          # 默认：/Users/chenbin/agent/workspace
+$AGENT_WORKSPACE/          # 默认：/Users/chenbin/goku/core/workspace
 ├── alice/                 # 用户 alice 的私有工作区（v1.2.1 起以用户名命名）
 │   ├── IR/
 │   └── reports/
@@ -2039,7 +2039,7 @@ $AGENT_WORKSPACE/          # 默认：/Users/chenbin/agent/workspace
 如需在升级时一次性迁移所有现存 UUID 目录：
 
 ```bash
-cd /Users/chenbin/agent
+cd /Users/chenbin/goku/core
 
 # 预览（不做实际改动）
 python scripts/migrate_workspace_dirs.py --dry-run
@@ -2054,7 +2054,7 @@ python scripts/migrate_workspace_dirs.py --symlink
 脚本输出示例：
 
 ```
-Found 2 UUID directory(ies) in /Users/chenbin/agent/workspace
+Found 2 UUID directory(ies) in /Users/chenbin/goku/core/workspace
 
   RENAME  b3fe2016-8104-4e29-8625-43ca13fdcfac  →  admin  (admin@example.com)
   RENAME  c1234567-...  →  alice  (alice@example.com)
@@ -2066,7 +2066,7 @@ Done.  migrated=2  skipped=0  errors=0
 
 | 变量 | 默认值 | 说明 |
 |------|--------|------|
-| `AGENT_WORKSPACE` | `/Users/chenbin/agent/workspace` | 工作区根目录 |
+| `AGENT_WORKSPACE` | `/Users/chenbin/goku/core/workspace` | 工作区根目录 |
 | `AGENT_WORKSPACE_DIR` | 同上（别名） | 兼容旧版配置 |
 
 ---

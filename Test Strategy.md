@@ -62,7 +62,7 @@ pip install pytest pytest-cov
 
 ## 二、运行测试
 
-所有命令均在**项目根目录**（`/Users/chenbin/agent/`）执行。
+所有命令均在**项目根目录**（`/Users/chenbin/goku/core/`）执行。
 
 ### 2.1 运行全量测试
 
